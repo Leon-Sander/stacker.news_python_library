@@ -1,7 +1,11 @@
 
-# StackerNews GraphQL API Wrapper
 
+
+# StackerNews GraphQL API Wrapper
+## This code is under development, many functions might not work, I will fix it in the coming days and weeks.
 This Python module provides a wrapper around the StackerNews GraphQL API. It handles the basic operations such as logging in, fetching items, searching, and other functionalities provided by the API.
+
+
 
 ## Setup
 
