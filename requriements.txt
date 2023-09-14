@@ -1,0 +1,6 @@
+requests-toolbelt
+gql
+requests
+aiohttp
+jwt
+retrying
