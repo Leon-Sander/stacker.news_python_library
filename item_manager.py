@@ -2,20 +2,34 @@
 from retrying import retry
 from gql import gql
 from logger import logger
-from queries import get_items_query, search_items_query, get_item_by_id_query, check_duplicate_query, get_rss_url_query
+from queries import get_items_query, search_items_query, get_item_by_id_query, check_duplicate_query, create_comment_query
 
 class ItemManager:
     def __init__(self, client):
         self.client = client
 
-    @retry(wait_exponential_multiplier=1000, wait_exponential_max=10000, stop_max_attempt_number=3)
-    def execute(self, query, variables=None):
+    @retry(wait_exponential_multiplier=3000, wait_exponential_max=10000, stop_max_attempt_number=3, retry_on_exception=lambda e: True)
+    def execute(self, query, variables=None, attempt=1):
         gql_query = gql(query)
         try:
-            return self.client.execute(gql_query, variable_values=variables)
+            result = self.client.execute(gql_query, variable_values=variables)
+            if attempt > 1:
+                logger.info(f"Query succeeded on attempt {attempt}.")
+            return result
         except Exception as e:
-            logger.error(f"Error executing query: {str(e)}")
+            logger.error(f"Error executing query on attempt {attempt}: {str(e)}")
+            if attempt < 3:  # If it's not the last attempt
+                return self.execute(query, variables, attempt + 1)
             raise
+
+
+    def create_comment(self, parent_id, text):
+        variables = {
+            "text": text,
+            "parentId": parent_id
+        }
+        response = self.execute(create_comment_query, variables)
+        return response["upsertComment"]["id"]
 
     def get_items(self, limit=10, cursor=None, sort="NEW", type=None, sub=None, name=None, when=None, by=None):
         variables = {

@@ -125,9 +125,10 @@ check_duplicate_query = """
     }
 """
 
-# Get RSS URL query
-get_rss_url_query = """
-    query ($tag: String) {
-        rss(tag: $tag)
+create_comment_query = """
+    mutation upsertComment($text: String!, $parentId: ID!) {
+        upsertComment(text: $text, parentId: $parentId) {
+            id
+        }
     }
 """

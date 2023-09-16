@@ -6,7 +6,6 @@ from logger import logger
 from authentication_manager import AuthenticationManager
 from item_manager import ItemManager
 from notification_manager import NotificationManager
-from push_subscription_manager import PushSubscriptionManager
 import os
 import requests
 from dotenv import load_dotenv
@@ -26,7 +25,6 @@ class StackerNewsGraphQL:
         self.authentication_manager = AuthenticationManager(self.client)
         self.item_manager = ItemManager(self.client)
         self.notification_manager = NotificationManager(self.client)
-        self.push_subscription_manager = PushSubscriptionManager(self.client)
 
     def refresh_session(self):
         return self.authentication_manager.refresh_session()
@@ -46,18 +44,11 @@ class StackerNewsGraphQL:
     def check_duplicate(self, url):
         return self.item_manager.check_duplicate(url)
 
-    
     def has_new_notifications(self):
         return self.notification_manager.has_new_notifications()
 
     def get_notifications(self, cursor=None, inc=None):
         return self.notification_manager.get_notifications(cursor, inc)
-
-    def delete_push_subscription(self, endpoint):
-        return self.push_subscription_manager.delete_push_subscription(endpoint)
-
-    def save_push_subscription(self, endpoint, p256dh, auth, old_endpoint=None):
-        return self.push_subscription_manager.save_push_subscription(endpoint, p256dh, auth, old_endpoint)
     
     def fetch_rss_feed(self):
         response = requests.get(STACKER_NEWS_RSS_FEED_URL)
@@ -66,3 +57,14 @@ class StackerNewsGraphQL:
             return response.text
         else:
             response.raise_for_status()
+
+    def create_comment(self, parent_id, text):
+        return self.item_manager.create_comment(parent_id, text)
+
+
+
+
+
+
+    
+    #todo: make a post and make a comment function

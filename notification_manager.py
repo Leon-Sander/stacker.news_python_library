@@ -7,14 +7,20 @@ class NotificationManager:
     def __init__(self, client):
         self.client = client
 
-    @retry(wait_exponential_multiplier=1000, wait_exponential_max=10000, stop_max_attempt_number=3)
-    def execute(self, query, variables=None):
+    @retry(wait_exponential_multiplier=3000, wait_exponential_max=10000, stop_max_attempt_number=3, retry_on_exception=lambda e: True)
+    def execute(self, query, variables=None, attempt=1):
         gql_query = gql(query)
         try:
-            return self.client.execute(gql_query, variable_values=variables)
+            result = self.client.execute(gql_query, variable_values=variables)
+            if attempt > 1:
+                logger.info(f"Query succeeded on attempt {attempt}.")
+            return result
         except Exception as e:
-            logger.error(f"Error executing query: {str(e)}")
+            logger.error(f"Error executing query on attempt {attempt}: {str(e)}")
+            if attempt < 3:  # If it's not the last attempt
+                return self.execute(query, variables, attempt + 1)
             raise
+
 
     def has_new_notifications(self):
         query = '''
