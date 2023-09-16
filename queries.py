@@ -117,7 +117,7 @@ get_notes_query = """
 # Check duplicate query
 check_duplicate_query = """
     query ($url: String!) {
-        dupe(url: $url) {
+        dupes(url: $url) {
             id
             title
             createdAt
