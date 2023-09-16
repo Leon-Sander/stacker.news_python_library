@@ -60,7 +60,7 @@ search_items_query = """
     }
 """
 
-# Get item by ID query
+# Get item by ID query, depth removed
 get_item_by_id_query = """
     query ($id: ID!) {
         item(id: $id) {
@@ -74,7 +74,7 @@ get_item_by_id_query = """
                 id
                 name
             }
-            depth
+            
             boost
             bounty
             upvotes
@@ -90,9 +90,10 @@ get_current_session_query = """
         me {
             id
             name
-            email
-            avatar
-            bio
+            bio {
+                title
+                url
+            }
         }
     }
 """
