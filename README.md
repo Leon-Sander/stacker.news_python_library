@@ -2,9 +2,32 @@
 
 
 # StackerNews GraphQL API Wrapper
-## This code is under development, many functions might not work, I will fix it in the coming days and weeks.
-This Python module provides a wrapper around the StackerNews GraphQL API. It handles the basic operations such as logging in, fetching items, searching, and other functionalities provided by the API.
 
+This Python library provides an interface to interact with the Stacker News GraphQL API. 
+
+## Important
+
+Some functions need authentication. Right now this is handled by pasting you session cookie into a .env file under SN_AUTH_COOKIE.
+## How to Retrieve a Cookie from a Web Request:
+
+   1. **Open Developer Tools**
+      - Press `F12` on your keyboard to open your browser's developer tools when on the stacker.news website.
+
+   2. **Navigate to the Network Tab**
+      - In the developer tools panel, click on the `Network` tab.
+
+   3. **Generate a Request**
+      - If no requests are visible, interact with the web page (e.g., click a button or link) or simply refresh the page to generate new requests.
+
+   4. **Select a Request**
+      - In the `Network` tab, a list of requests will be shown. Click on any request from this list.
+
+   5. **Access the Headers**
+      - Once you've selected a request, details about that request will appear. Look for the `Headers` section.
+
+   6. **Locate the Cookie**
+      - Within the `Headers` section, scroll down until you find the `Cookie` header.
+      - The value of the `Cookie` header will contain the desired cookie. You can select and copy this value for your use.
 
 
 ## Setup
@@ -35,66 +58,29 @@ sn = StackerNewsGraphQL()
 
 ### Authentication
 
-1. **Login**:
-   - Parameters:
-     - `k1`: A string representing the k1 key for authentication.
-     - `sig`: A string representing the signature for authentication.
-   ```python
-   sn.login(k1="your_k1", sig="your_sig")
-   ```
+- **refresh_session()**: Refreshes the user session.
+- **get_current_session()**: Retrieves the details of the current user session.
 
-2. **Logout**:
-   ```python
-   sn.logout()
-   ```
+### Items
 
-3. **Token Validation**:
-   Check if the current JWT token is valid:
-   ```python
-   is_valid = sn.validate_token()
-   ```
+- **get_items(limit, cursor, sort, type, sub, name, when, by)**: Fetches a list of items based on provided filters such as sorting, type, etc. Default limit is set to 10.
+- **search_items(q, sub, cursor, what, sort, when, limit)**: Searches for items based on the given query string and other optional parameters. Default limit is set to 10.
+- **get_item_by_id(item_id)**: Retrieves an item's details using its ID.
+- **check_duplicate(url)**: Checks if a given URL has already been posted on Stacker News.
+  
+### Notifications
 
-### Fetching Data
+- **has_new_notifications()**: Checks if the user has any new notifications.
+- **get_notifications(cursor, inc)**: Retrieves user notifications. Can be filtered using a cursor or inclusive flag.
 
-1. **Get Items**:
-   Retrieve a list of items based on the provided parameters.
-   ```python
-   items = sn.get_items(limit=10, sort="NEW")
-   ```
+### RSS Feed
 
-2. **Search Items**:
-   Search for items based on the given query string and other optional parameters.
-   ```python
-   search_results = sn.search_items(q="python")
-   ```
+- **fetch_rss_feed()**: Fetches the RSS feed from Stacker News. It will raise an error if the request is unsuccessful.
 
-3. **Get Item by ID**:
-   Retrieve a specific item by its ID.
-   ```python
-   item = sn.get_item_by_id(item_id=12345)
-   ```
+### Comments
 
-4. **Get Current Session**:
-   Retrieve details about the current logged-in user/session.
-   ```python
-   session_info = sn.get_current_session()
-   ```
+- **create_comment(parent_id, text)**: Allows users to create a new comment under a specific parent item (e.g., post or another comment).
 
-5. **Get Notes**:
-   Retrieve a list of notes.
-   ```python
-   notes = sn.get_notes(limit=10)
-   ```
+### TODO
 
-6. **Check for Duplicate Items**:
-   Check if an item with the given URL already exists.
-   ```python
-   duplicates = sn.check_duplicate(url="https://example.com")
-   ```
-
-7. **Get RSS URL**:
-   Retrieve the RSS URL for the provided tag (optional).
-   ```python
-   rss_url = sn.get_rss_url(tag="python")
-   ```
-
+- Implementing functions for creating new posts.

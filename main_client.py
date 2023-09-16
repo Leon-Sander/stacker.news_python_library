@@ -60,11 +60,5 @@ class StackerNewsGraphQL:
 
     def create_comment(self, parent_id, text):
         return self.item_manager.create_comment(parent_id, text)
-
-
-
-
-
-
-    
-    #todo: make a post and make a comment function
+        
+    #todo: creating posts
