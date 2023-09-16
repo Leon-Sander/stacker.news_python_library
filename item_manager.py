@@ -2,7 +2,7 @@
 from retrying import retry
 from gql import gql
 from logger import logger
-from queries import get_items_query, search_items_query, get_item_by_id_query, check_duplicate_query, create_comment_query
+from queries import upsert_discussion_query, upsert_poll_query, upsert_job_query, upsert_bounty_query, upsert_link_query, get_items_query, search_items_query, get_item_by_id_query, check_duplicate_query, create_comment_query
 
 class ItemManager:
     def __init__(self, client):
@@ -72,3 +72,80 @@ class ItemManager:
             "url": url
         }
         return self.execute(check_duplicate_query, variables)
+
+    def upsert_link(self, title, url, sub=None, id=None, boost=None, forward=None, hash=None, hmac=None):
+        variables = {
+            "title": title,
+            "url": url,
+            "sub": sub,
+            "id": id,
+            "boost": boost,
+            "forward": forward,
+            "hash": hash,
+            "hmac": hmac
+        }
+        response = self.execute(upsert_link_query, variables)
+        return response["upsertLink"]
+
+    def upsert_bounty(self, title, text, bounty, id=None, sub=None, boost=None, forward=None, hash=None, hmac=None):
+        variables = {
+            "title": title,
+            "text": text,
+            "bounty": bounty,
+            "id": id,
+            "sub": sub,
+            "boost": boost,
+            "forward": forward,
+            "hash": hash,
+            "hmac": hmac
+        }
+        response = self.execute(upsert_bounty_query, variables)
+        return response["upsertBounty"]
+
+    def upsert_job(self, sub, title, company, text, url, maxBid, id=None, location=None, remote=None, status=None, logo=None, hash=None, hmac=None):
+        variables = {
+            "sub": sub,
+            "title": title,
+            "company": company,
+            "text": text,
+            "url": url,
+            "maxBid": maxBid,
+            "id": id,
+            "location": location,
+            "remote": remote,
+            "status": status,
+            "logo": logo,
+            "hash": hash,
+            "hmac": hmac
+        }
+        response = self.execute(upsert_job_query, variables)
+        return response["upsertJob"]
+
+    def upsert_poll(self, title, options, id=None, sub=None, text=None, boost=None, forward=None, hash=None, hmac=None):
+        variables = {
+            "title": title,
+            "options": options,
+            "id": id,
+            "sub": sub,
+            "text": text,
+            "boost": boost,
+            "forward": forward,
+            "hash": hash,
+            "hmac": hmac
+        }
+        response = self.execute(upsert_poll_query, variables)
+        return response["upsertPoll"]
+
+    def upsert_discussion(self, title, id=None, sub=None, text=None, boost=None, forward=None, hash=None, hmac=None):
+        variables = {
+            "title": title,
+            "id": id,
+            "sub": sub,
+            "text": text,
+            "boost": boost,
+            "forward": forward,
+            "hash": hash,
+            "hmac": hmac
+        }
+        response = self.execute(upsert_discussion_query, variables)
+        return response["upsertDiscussion"]

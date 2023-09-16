@@ -62,3 +62,18 @@ class StackerNewsGraphQL:
         return self.item_manager.create_comment(parent_id, text)
         
     #todo: creating posts
+
+    def create_link_post(self, title, url, sub=None, id=None, boost=None, forward=None, hash=None, hmac=None):
+        return self.item_manager.upsert_link(title, url, sub, id, boost, forward, hash, hmac)
+
+    def create_bounty_post(self, title, text, bounty, id=None, sub=None, boost=None, forward=None, hash=None, hmac=None):
+        return self.item_manager.upsert_bounty(title, text, bounty, id, sub, boost, forward, hash, hmac)
+
+    def create_job_post(self, sub, title, company, text, url, maxBid, id=None, location=None, remote=None, status=None, logo=None, hash=None, hmac=None):
+        return self.item_manager.upsert_job(sub, title, company, text, url, maxBid, id, location, remote, status, logo, hash, hmac)
+
+    def create_poll_post(self, title, options, id=None, sub=None, text=None, boost=None, forward=None, hash=None, hmac=None):
+        return self.item_manager.upsert_poll(title, options, id, sub, text, boost, forward, hash, hmac)
+
+    def create_discussion_post(self, title, id=None, sub=None, text=None, boost=None, forward=None, hash=None, hmac=None):
+        return self.item_manager.upsert_discussion(title, id, sub, text, boost, forward, hash, hmac)

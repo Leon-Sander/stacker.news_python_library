@@ -132,3 +132,43 @@ create_comment_query = """
         }
     }
 """
+
+upsert_link_query = """
+mutation ($id: ID, $sub: String, $title: String!, $url: String!, $boost: Int, $forward: [ItemForwardInput], $hash: String, $hmac: String) {
+    upsertLink(id: $id, sub: $sub, title: $title, url: $url, boost: $boost, forward: $forward, hash: $hash, hmac: $hmac) {
+        id
+    }
+}
+"""
+
+upsert_bounty_query = """
+mutation ($title: String!, $text: String, $bounty: Int, $id: ID, $sub: String, $boost: Int, $forward: [ItemForwardInput], $hash: String, $hmac: String) {
+    upsertBounty(title: $title, text: $text, bounty: $bounty, id: $id, sub: $sub, boost: $boost, forward: $forward, hash: $hash, hmac: $hmac) {
+        id
+    }
+}
+"""
+
+upsert_job_query = """
+mutation ($sub: String!, $title: String!, $company: String!, $text: String!, $url: String!, $maxBid: Int!, $id: ID, $location: String, $remote: Boolean, $status: String, $logo: Int, $hash: String, $hmac: String) {
+    upsertJob(sub: $sub, title: $title, company: $company, text: $text, url: $url, maxBid: $maxBid, id: $id, location: $location, remote: $remote, status: $status, logo: $logo, hash: $hash, hmac: $hmac) {
+        id
+    }
+}
+"""
+
+upsert_poll_query = """
+mutation ($title: String!, $options: [String!]!, $id: ID, $sub: String, $text: String, $boost: Int, $forward: [ItemForwardInput], $hash: String, $hmac: String) {
+    upsertPoll(title: $title, options: $options, id: $id, sub: $sub, text: $text, boost: $boost, forward: $forward, hash: $hash, hmac: $hmac) {
+        id
+    }
+}
+"""
+
+upsert_discussion_query = """
+mutation ($title: String!, $id: ID, $sub: String, $text: String, $boost: Int, $forward: [ItemForwardInput], $hash: String, $hmac: String) {
+    upsertDiscussion(title: $title, id: $id, sub: $sub, text: $text, boost: $boost, forward: $forward, hash: $hash, hmac: $hmac) {
+        id
+    }
+}
+"""
