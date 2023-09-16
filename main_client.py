@@ -1,14 +1,14 @@
-
 from retrying import retry
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
-from config import ENDPOINT
+from config import ENDPOINT, STACKER_NEWS_RSS_FEED_URL
 from logger import logger
 from authentication_manager import AuthenticationManager
 from item_manager import ItemManager
 from notification_manager import NotificationManager
 from push_subscription_manager import PushSubscriptionManager
 import os
+import requests
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -43,13 +43,9 @@ class StackerNewsGraphQL:
     def get_item_by_id(self, item_id):
         return self.item_manager.get_item_by_id(item_id)
 
-
-
     def check_duplicate(self, url):
         return self.item_manager.check_duplicate(url)
 
-    def get_rss_url(self, tag=None):
-        return self.item_manager.get_rss_url(tag)
     
     def has_new_notifications(self):
         return self.notification_manager.has_new_notifications()
@@ -62,3 +58,11 @@ class StackerNewsGraphQL:
 
     def save_push_subscription(self, endpoint, p256dh, auth, old_endpoint=None):
         return self.push_subscription_manager.save_push_subscription(endpoint, p256dh, auth, old_endpoint)
+    
+    def fetch_rss_feed(self):
+        response = requests.get(STACKER_NEWS_RSS_FEED_URL)
+
+        if response.status_code == 200:
+            return response.text
+        else:
+            response.raise_for_status()

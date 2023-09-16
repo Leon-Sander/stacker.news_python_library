@@ -58,7 +58,3 @@ class ItemManager:
             "url": url
         }
         return self.execute(check_duplicate_query, variables)
-
-    def get_rss_url(self, tag=None):
-        variables = {"tag": tag} if tag else {}
-        return self.execute(get_rss_url_query, variables)
